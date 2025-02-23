@@ -1,0 +1,18 @@
+body {
+	border: none;
+}
+label {
+	margin-right: 4em;
+	margin-bottom: 2em;
+	display: inline-block;
+}
+input, select {
+	margin-left: 1em;
+	vertical-align: text-top;
+}
+textarea {
+	min-width: 100%;
+}
+form {
+	display: block;
+}
