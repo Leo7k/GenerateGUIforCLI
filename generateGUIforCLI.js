@@ -34,22 +34,27 @@ function onPageLoad(event) {
 }
 
 function loadCmdLineDescriptor(evt) {
+	document.getElementById(EXECUTABLE_FILE_INPUT_ID).value = "";
+	document.getElementById(CMDLINE_RESULT_ID).innerHTML = "";
+	document.getElementById(MAIN_FORM_ID).innerHTML = "";
 	if (this.files != null) {
 		if (this.files.length > 0) {
 			var currentFile = this.files[0];
 			if (currentFile.text != null) {
 				currentFile.text().then(parseCmdLineDescriptor);
+				return;
 			}
-			else {
+			else if (window.FileReader != null) {
 				var reader = new FileReader();
 				reader.onload = function(e) {
 					parseCmdLineDescriptor(reader.result);
 				}
 				reader.readAsText(currentFile);
+				return;
 			}
 		}
 	}
-	else if (window.ActiveXObject != null) {
+	if (window.ActiveXObject != null) {
 		var fileSystemObject = new ActiveXObject("Scripting.FileSystemObject");
 		var txtFile = fileSystemObject.OpenTextFile(this.value, 1, false, 0);
 		var jsonText = txtFile.ReadAll();
@@ -68,12 +73,12 @@ function parseCmdLineDescriptor(descriptorText) {
 	for (var section in argumentsDescriptors.sections) {
 		var sectionFieldset = document.createElement("fieldset");
 		var sectionFieldsetLegend = document.createElement("legend");
-		sectionFieldsetLegend.innerHTML = argumentsDescriptors.sections[section].displayName;
+		sectionFieldsetLegend.innerText = argumentsDescriptors.sections[section].displayName;
 		sectionFieldset.appendChild(sectionFieldsetLegend);
 		for (var i = 0; i < argumentsDescriptors.sections[section].args.length; i++) {
 			var argumentDescriptor = argumentsDescriptors.sections[section].args[i];
 			var inputLabel = document.createElement("label");
-			inputLabel.innerHTML = argumentDescriptor.displayName;
+			inputLabel.innerText = argumentDescriptor.displayName;
 			var inputTagName = null;
 			var inputControl = null;
 			if (argumentDescriptor.type == "number") {
@@ -268,7 +273,14 @@ function onGenerateCLI_Clicked(evt) {
 					}
 					else {
 						doNotIncludeThisParameter = false;
-						argumentValue = inputControl.value;
+						if ((inputControl.type == "file") && (!inputControl.multiple)) {
+							if (inputControl.value.substr(0, 12) == "C:\\fakepath\\") {
+								argumentValue = inputControl.value.substr(12);
+							}
+						}
+						else {
+							argumentValue = inputControl.value;
+						}
 					}
 				}
 				if (inputControl.dataset.nameValueSeparator !== undefined) {
@@ -288,7 +300,7 @@ function onGenerateCLI_Clicked(evt) {
 			}
 		}
 		document.getElementById(CMDLINE_RESULT_ID).executeArguments = executeArguments;
-		document.getElementById(CMDLINE_RESULT_ID).innerHTML = resultString;
+		document.getElementById(CMDLINE_RESULT_ID).innerText = resultString;
 		if ((window.ActiveXObject != null) || (window.require != null)) {
 			var executeCmdLine_Button = document.getElementById(EXECUTE_BUTTON_ID);
 			if (executeCmdLine_Button.disabled) {
@@ -297,7 +309,7 @@ function onGenerateCLI_Clicked(evt) {
 			}
 		}
 		else {
-			document.getElementById(WARNING_MSG_ID).innerHTML = "It seems that you are running this tool in browser. To be able to execute target app from here you should run it via NW.js. You also may try to rename .html to .hta - it should work on older windows versions";
+			document.getElementById(WARNING_MSG_ID).innerText = "It seems that you are running this tool in browser. If you want to execute target app from here - you should run it via NW.js. You also may try to rename .html to .hta - it should work on older Windows versions.";
 		}
 	}
 }
@@ -316,8 +328,8 @@ function shellOutput(error, stdout, stderr) {
 
 function onExecuteClicked(evt) {
 	var commandToRun = '"'+document.getElementById(EXECUTABLE_FILE_INPUT_ID).value+'"';
-	var commandArguments = document.getElementById(CMDLINE_RESULT_ID).innerHTML;
-	if (!confirm("WARNING: You are about to execute the command that you see bellow. Do not confirm execution if you don't understand what you're doing. Proceed at your own risk. \n \n "+commandToRun+" "+document.getElementById(CMDLINE_RESULT_ID).innerHTML)) {
+	var commandArguments = document.getElementById(CMDLINE_RESULT_ID).innerText;
+	if (!confirm("WARNING: You are about to execute the command that you see bellow. Do not confirm execution if you don't understand what you're doing. Proceed at your own risk. \n \n "+commandToRun+" "+document.getElementById(CMDLINE_RESULT_ID).innerText)) {
 		return;
 	}
 	if (window.ActiveXObject != null) {
