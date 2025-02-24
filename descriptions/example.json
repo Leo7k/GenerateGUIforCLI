@@ -1,0 +1,89 @@
+{
+  "description": "Example CLI Application",
+  "defaultArgumentNameValueSeparator": " ",
+  "defaultSelectMultipleValueSeparator": ",",
+  "defaultSelectMultipleQuotationSymbol": "`",
+  "defaultQuotationSymbol": "'",
+  "defaultBooleanTrue": "true",
+  "defaultBooleanFalse": "false",
+  "sections": {
+    "primary": {
+      "displayName": "Primary arguments",
+      "args": [
+        {
+          "name": "--count",
+          "type": "number",
+          "required": true,
+          "displayName": "Number of something",
+          "nameValueSeparator": "="
+        },
+        {
+          "name": "--text",
+          "type": "string",
+          "quotationSymbol": "'",
+          "defaultValue": "dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt",
+          "displayName": "Some text here"
+        },
+        {
+          "name": "--input-file",
+          "type": "input-file-multiple",
+          "quotationSymbol": "`",
+          "displayName": "Path to input file"
+        },
+        {
+          "name": "/boolean-flag",
+          "type": "boolean",
+          "defaultValue": true,
+          "displayName": "Do some stuff",
+          "booleanTrue": "yes",
+          "booleanFalse": "no"
+        }
+      ]
+    },
+    "secondary": {
+      "displayName": "Secondary section",
+      "args": [
+        {
+          "name": "--colors",
+          "type": "select-multiple",
+          "defaultValue": "G",
+          "displayName": "Choose colors",
+          "options": [
+            {
+              "value": "B",
+              "displayValue": "Blue"
+            },
+            {
+              "value": "G",
+              "displayValue": "Green"
+            },
+            {
+              "value": "R",
+              "displayValue": "Red"
+            }
+          ]
+        },
+        {
+          "name": "--direction",
+          "type": "select-one",
+          "defaultValue": "C",
+          "displayName": "Choose one of",
+          "options": [
+            {
+              "value": "L",
+              "displayValue": "Left"
+            },
+            {
+              "value": "C",
+              "displayValue": "Center"
+            },
+            {
+              "value": "R",
+              "displayValue": "Right"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
