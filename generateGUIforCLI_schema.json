@@ -37,6 +37,9 @@
                 {
                   "type": "object",
                   "properties": {
+                    "booleanTrueAsPresence": {
+                      "type": "boolean"
+                    },
                     "booleanTrue": {
                       "type": "string"
                     },
@@ -55,6 +58,9 @@
                     },
                     "displayName": {
                       "type": "string"
+                    },
+                    "dontIncludeName": {
+                      "type": "boolean"
                     },
                     "quotationSymbol": {
                       "type": "string"

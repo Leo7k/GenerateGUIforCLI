@@ -7,13 +7,12 @@ var EXECUTABLE_FILE_INPUT_ID = "executable-name";
 var WARNING_MSG_ID = "warning-msg";
 
 function onPageLoad(event) {
-	var loadCmdLineDescriptor_Button = document.getElementById(CMDLINE_DESCRIPTOR_INPUT_ID);
-	if (loadCmdLineDescriptor_Button.addEventListener) {
-		loadCmdLineDescriptor_Button.addEventListener("change", loadCmdLineDescriptor, false);
+	var cmdLineDescriptorFileInput = document.getElementById(CMDLINE_DESCRIPTOR_INPUT_ID);
+	if (cmdLineDescriptorFileInput.addEventListener) {
+		cmdLineDescriptorFileInput.addEventListener("change", loadCmdLineDescriptor, false);
 	}
 	else {
-		loadCmdLineDescriptor_Button.attachEvent("onchange", loadCmdLineDescriptor);
-		//loadCmdLineDescriptor_Button.onchange = loadCmdLineDescriptor;
+		cmdLineDescriptorFileInput.attachEvent("onchange", loadCmdLineDescriptor);
 	}
 	var genCmdLine_Button = document.getElementById(GENERATE_CMDLINE_BUTTON_ID);
 	if (genCmdLine_Button.addEventListener) {
@@ -21,15 +20,6 @@ function onPageLoad(event) {
 	}
 	else {
 		genCmdLine_Button.attachEvent("onclick", onGenerateCLI_Clicked);
-	}
-	var executeCmdLine_Button = document.getElementById(EXECUTE_BUTTON_ID);
-	if (executeCmdLine_Button.disabled) {
-		if (executeCmdLine_Button.addEventListener) {
-			executeCmdLine_Button.addEventListener("click", onExecuteClicked, false);
-		}
-		else {
-			executeCmdLine_Button.attachEvent("onclick", onExecuteClicked);
-		}
 	}
 }
 
@@ -70,6 +60,7 @@ function parseCmdLineDescriptor(descriptorText) {
 		return;
 	}
 	argumentsDescriptors = JSON.parse(descriptorText);
+	var fileInputsReportFakePath = (document.getElementById(CMDLINE_DESCRIPTOR_INPUT_ID).value.substr(0, 12) == "C:\\fakepath\\");
 	for (var section in argumentsDescriptors.sections) {
 		var sectionFieldset = document.createElement("fieldset");
 		var sectionFieldsetLegend = document.createElement("legend");
@@ -78,7 +69,6 @@ function parseCmdLineDescriptor(descriptorText) {
 		for (var i = 0; i < argumentsDescriptors.sections[section].args.length; i++) {
 			var argumentDescriptor = argumentsDescriptors.sections[section].args[i];
 			var inputLabel = document.createElement("label");
-			inputLabel.innerText = argumentDescriptor.displayName;
 			var inputTagName = null;
 			var inputControl = null;
 			if (argumentDescriptor.type == "number") {
@@ -94,13 +84,23 @@ function parseCmdLineDescriptor(descriptorText) {
 			else if (argumentDescriptor.type == "input-file") {
 				inputTagName = "input";
 				inputControl = document.createElement(inputTagName);
-				inputControl.type = "file";
+				if (fileInputsReportFakePath) {
+					inputControl.type = "text";
+				}
+				else {
+					inputControl.type = "file";
+				}
 			}
 			else if (argumentDescriptor.type == "input-file-multiple") {
 				inputTagName = "input";
 				inputControl = document.createElement(inputTagName);
-				inputControl.type = "file";
-				inputControl.multiple = true;
+				if (fileInputsReportFakePath) {
+					inputControl.type = "text";
+				}
+				else {
+					inputControl.type = "file";
+					inputControl.multiple = true;
+				}
 			}
 			else if (argumentDescriptor.type == "output-file") {
 				inputTagName = "input";
@@ -153,6 +153,9 @@ function parseCmdLineDescriptor(descriptorText) {
 				if (argumentDescriptor.required) {
 					inputControl.required = true;
 				}
+				if (argumentDescriptor.dontIncludeName) {
+					inputControl.dataset.dontIncludeName = argumentDescriptor.dontIncludeName;
+				}
 				if ((argumentDescriptor.defaultValue !== undefined) && (argumentDescriptor.type != "input-file") && (argumentDescriptor.type != "input-file-multiple")  && (argumentDescriptor.type != "select-multiple")) {
 					inputControl.value = argumentDescriptor.defaultValue;
 				}
@@ -167,6 +170,9 @@ function parseCmdLineDescriptor(descriptorText) {
 	
 			}
 			else {
+				if (argumentDescriptor.booleanTrueAsPresence) {
+					inputControl.dataset.booleanTrueAsPresence = argumentDescriptor.booleanTrueAsPresence;
+				}
 				if (argumentDescriptor.booleanTrue !== undefined) {
 					inputControl.dataset.booleanTrue = argumentDescriptor.booleanTrue;
 				}
@@ -177,7 +183,13 @@ function parseCmdLineDescriptor(descriptorText) {
 					inputControl.checked = argumentDescriptor.defaultValue;
 				}
 			}
-			inputLabel.appendChild(inputControl);
+			inputLabel.innerText = argumentDescriptor.displayName;
+			if (inputControl.type == "checkbox") {
+				inputLabel.insertBefore(inputControl, inputLabel.firstChild);
+			}
+			else {
+				inputLabel.appendChild(inputControl);
+			}
 			sectionFieldset.appendChild(inputLabel);
 			document.getElementById(MAIN_FORM_ID).appendChild(sectionFieldset);
 		}
@@ -193,7 +205,7 @@ function onGenerateCLI_Clicked(evt) {
 	var mainForm = document.getElementById(MAIN_FORM_ID);
 	if ((!mainForm.reportValidity) || (mainForm.reportValidity())) {
 		var formAllControls = mainForm.elements ;
-		var executeArguments = [];
+		//var executeArguments = [];
 		var resultString = "";
 		for (var i = 0; i < formAllControls.length; i++) {
 			var inputControl = formAllControls[i];
@@ -264,8 +276,13 @@ function onGenerateCLI_Clicked(evt) {
 					doNotIncludeThisParameter = (inputControl.files.length < 1);
 				}
 				else if (inputControl.type == "checkbox") {
-					argumentValue = inputControl.checked ? booleanTrue : booleanFalse;
-					doNotIncludeThisParameter = false;
+					if (inputControl.dataset.booleanTrueAsPresence) {
+						doNotIncludeThisParameter = !inputControl.checked;
+					}
+					else {
+						argumentValue = inputControl.checked ? booleanTrue : booleanFalse;
+						doNotIncludeThisParameter = false;
+					}
 				}
 				else {
 					if ((inputControl.value === undefined) || (inputControl.value === null) || (inputControl.value.length < 1)) {
@@ -273,14 +290,7 @@ function onGenerateCLI_Clicked(evt) {
 					}
 					else {
 						doNotIncludeThisParameter = false;
-						if ((inputControl.type == "file") && (!inputControl.multiple)) {
-							if (inputControl.value.substr(0, 12) == "C:\\fakepath\\") {
-								argumentValue = inputControl.value.substr(12);
-							}
-						}
-						else {
-							argumentValue = inputControl.value;
-						}
+						argumentValue = inputControl.value;
 					}
 				}
 				if (inputControl.dataset.nameValueSeparator !== undefined) {
@@ -293,23 +303,52 @@ function onGenerateCLI_Clicked(evt) {
 					quotationSymbol = "";
 				}
 				if (!doNotIncludeThisParameter) {
-					var currentArgumentStr = argumentName + nameValueSeparator + quotationSymbol+argumentValue+quotationSymbol;
-					executeArguments.push(currentArgumentStr);
+					var currentArgumentStr = "";
+					if (!inputControl.dataset.dontIncludeName) {
+						currentArgumentStr  = argumentName;
+					}
+					if (!((inputControl.type == "checkbox") && (inputControl.dataset.booleanTrueAsPresence))) {
+						if (!inputControl.dataset.dontIncludeName) {
+							currentArgumentStr  = currentArgumentStr + nameValueSeparator;
+						}
+						currentArgumentStr = currentArgumentStr + quotationSymbol+argumentValue+quotationSymbol;
+					}
+					//executeArguments.push(currentArgumentStr);
 					resultString = resultString + " " + currentArgumentStr;
 				}
 			}
 		}
-		document.getElementById(CMDLINE_RESULT_ID).executeArguments = executeArguments;
+		//document.getElementById(CMDLINE_RESULT_ID).executeArguments = executeArguments;
 		document.getElementById(CMDLINE_RESULT_ID).innerText = resultString;
 		if ((window.ActiveXObject != null) || (window.require != null)) {
-			var executeCmdLine_Button = document.getElementById(EXECUTE_BUTTON_ID);
-			if (executeCmdLine_Button.disabled) {
-				executeCmdLine_Button.disabled = false;
-				document.getElementById(EXECUTABLE_FILE_INPUT_ID).disabled = false;
+			var executableFileInput = document.getElementById(EXECUTABLE_FILE_INPUT_ID);
+			if (executableFileInput.disabled) {
+				executableFileInput.disabled = false;
+				if (executableFileInput.addEventListener) {
+					executableFileInput.addEventListener("change", onExecutableSelected, false);
+				}
+				else {
+					executableFileInput.attachEvent("onchange", onExecutableSelected);
+				}
 			}
 		}
 		else {
 			document.getElementById(WARNING_MSG_ID).innerText = "It seems that you are running this tool in browser. If you want to execute target app from here - you should run it via NW.js. You also may try to rename .html to .hta - it should work on older Windows versions.";
+		}
+	}
+}
+
+function onExecutableSelected() {
+	if ((this.value !== null) && (this.value !== undefined) && (this.value.length > 0)) {
+		var executeCmdLineButton = document.getElementById(EXECUTE_BUTTON_ID);
+		if (executeCmdLineButton.disabled) {
+			executeCmdLineButton.disabled = false;
+			if (executeCmdLineButton.addEventListener) {
+				executeCmdLineButton.addEventListener("click", onExecuteClicked, false);
+			}
+			else {
+				executeCmdLineButton.attachEvent("onclick", onExecuteClicked);
+			}
 		}
 	}
 }
@@ -328,14 +367,14 @@ function shellOutput(error, stdout, stderr) {
 
 function onExecuteClicked(evt) {
 	var commandToRun = '"'+document.getElementById(EXECUTABLE_FILE_INPUT_ID).value+'"';
-	var commandArguments = document.getElementById(CMDLINE_RESULT_ID).innerText;
-	if (!confirm("WARNING: You are about to execute the command that you see bellow. Do not confirm execution if you don't understand what you're doing. Proceed at your own risk. \n \n "+commandToRun+" "+document.getElementById(CMDLINE_RESULT_ID).innerText)) {
+	var commandArguments = document.getElementById(CMDLINE_RESULT_ID).innerHTML;
+	if (!confirm("WARNING: You are about to execute the command that you see bellow. Do not confirm execution if you don't understand what you're doing. Proceed at your own risk. \n \n "+commandToRun+" "+commandArguments)) {
 		return;
 	}
 	if (window.ActiveXObject != null) {
 		var shell = new ActiveXObject("Shell.Application");
 		shell.ShellExecute(commandToRun, commandArguments, "","open","1");
-		//Shell.ShellExecute( sFile, [ vArguments ], [ vDirectory ], [ vOperation ], [ vShow ]);
+		//Shell.ShellExecute(file, [ arguments ], [ directory ], [ operation ], [ show ]);
 		shell = undefined;
 	}
 	else if (window.require != null) {

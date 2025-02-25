@@ -10,6 +10,10 @@ input, select {
 	margin-left: 1em;
 	vertical-align: text-top;
 }
+input[type="checkbox"] {
+	margin-left: 0px;
+	vertical-align: text-top;
+}
 textarea {
 	min-width: 100%;
 }
