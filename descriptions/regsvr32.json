@@ -1,0 +1,57 @@
+{
+  "description": "regsvr32 - Register Server",
+  "defaultArgumentNameValueSeparator": " ",
+  "defaultSelectMultipleValueSeparator": ",",
+  "defaultSelectMultipleQuotationSymbol": "`",
+  "defaultQuotationSymbol": "\"",
+  "defaultBooleanTrue": "true",
+  "defaultBooleanFalse": "false",
+  "sections": {
+    "main": {
+      "displayName": "regsvr32GUI",
+      "args": [
+        {
+          "name": "/u",
+          "type": "boolean",
+          "defaultValue": false,
+          "displayName": "Unregister (call DllUnregisterServer).",
+          "booleanTrueAsPresence": true
+        },
+        {
+          "name": "/s",
+          "type": "boolean",
+          "defaultValue": false,
+          "displayName": "Silent mode - do not display messages.",
+          "booleanTrueAsPresence": true
+        },
+        {
+          "name": "/n",
+          "type": "boolean",
+          "defaultValue": false,
+          "displayName": "Prevent calling DllRegisterServer. This parameter requires you to also use DllInstall / DllUninstall Command line.",
+          "booleanTrueAsPresence": true
+        },
+        {
+          "name": "/i",
+          "type": "string",
+          "nameValueSeparator": ": ",
+          "quotationSymbol": "",
+          "displayName": "DllInstall / DllUninstall Command line."
+        },
+        {
+          "name": "--input-file",
+          "type": "input-file",
+          "dontIncludeName": true,
+          "displayName": "Path to the .dll file that will be registered / unregistered."
+        },
+        {
+          "name": "/?",
+          "type": "boolean",
+          "defaultValue": false,
+          "displayName": "Display help at the command prompt.",
+          "booleanTrueAsPresence": true
+        }
+      ]
+    }
+  }
+}
