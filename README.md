@@ -1,5 +1,5 @@
 # What is this?
-GenerateGUIforCLI - a simple tool that allows you to display a graphical interface for command line applications.
+GenerateGUIforCLI - a simple tool that allows you to easiy build GUI on top of CLI applications.
 
 # How to run?
 Download the entire repository zip archive and unpack it in any folder. There are three possible ways to run:
@@ -14,4 +14,6 @@ You need to load a JSON file containing the description of command line argument
 If you initiate GenerateGUIforCLI outside of a web browser, you have the option to run the intended application right from the GUI. To do this, click the "Execute" button.
 
 # Where to get a JSON file with command line argument descriptions?
-If you don't have a JSON file with command line argument descriptions for your specific application, you need to create one using the textual description available through the 'help' or '/?' commands. Then, follow the [JSON Schema](https://github.com/Leo7k/GenerateGUIforCLI/blob/main/generateGUIforCLI_schema_2019-09.json) and use it with the GenerateGUIforCLI tool. An example of a correct description of command line arguments in the required format can be found in the file `example.json`.
+If you don't have a JSON file with command line argument descriptions for your specific application, you need to
+1. get textual description of command line arguments (usually available through the 'help' or '/?' commands)
+2. create your own JSON file with command line arguments description according to [JSON Schema](https://github.com/Leo7k/GenerateGUIforCLI/blob/main/generateGUIforCLI_schema_2019-09.json). An example of a correct description of command line arguments in the required format can be found in the file `example.json`. You may use [JSON Editor](https://json-editor.github.io/json-editor/) or another JSON Editor with GUI.
