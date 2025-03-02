@@ -6,12 +6,11 @@
   "defaultQuotationSymbol": "'",
   "defaultBooleanTrue": "true",
   "defaultBooleanFalse": "false",
-  "sections": {
-    "primary": {
+  "sections": [{
       "displayName": "Primary arguments",
       "args": [
         {
-          "name": "--count",
+          "name": "/u",
           "type": "number",
           "required": true,
           "displayName": "Number of something",
@@ -31,16 +30,23 @@
           "displayName": "Path to input file"
         },
         {
-          "name": "/boolean-flag",
+          "name": "--boolean-flag",
           "type": "boolean",
           "defaultValue": true,
           "displayName": "Do some stuff",
           "booleanTrue": "yes",
           "booleanFalse": "no"
+        },
+        {
+          "name": "/boolean-presence",
+          "type": "boolean",
+          "defaultValue": true,
+          "displayName": "Presence flag",
+          "booleanTrueAsPresence": true
         }
       ]
     },
-    "secondary": {
+    {
       "displayName": "Secondary section",
       "args": [
         {
@@ -85,5 +91,5 @@
         }
       ]
     }
-  }
+  ]
 }

@@ -6,8 +6,7 @@
   "defaultQuotationSymbol": "\"",
   "defaultBooleanTrue": "true",
   "defaultBooleanFalse": "false",
-  "sections": {
-    "main": {
+  "sections": [{
       "displayName": "regsvr32GUI",
       "args": [
         {
@@ -53,5 +52,5 @@
         }
       ]
     }
-  }
+  ]
 }
