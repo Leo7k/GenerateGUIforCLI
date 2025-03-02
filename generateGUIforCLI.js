@@ -27,31 +27,36 @@ function loadCmdLineDescriptor(evt) {
 	document.getElementById(EXECUTABLE_FILE_INPUT_ID).value = "";
 	document.getElementById(CMDLINE_RESULT_ID).innerHTML = "";
 	document.getElementById(MAIN_FORM_ID).innerHTML = "";
-	if (this.files != null) {
-		if (this.files.length > 0) {
-			var currentFile = this.files[0];
-			if (currentFile.text != null) {
-				currentFile.text().then(parseCmdLineDescriptor);
-				return;
-			}
-			else if (window.FileReader != null) {
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					parseCmdLineDescriptor(reader.result);
+	try {
+		if (this.files != null) {
+			if (this.files.length > 0) {
+				var currentFile = this.files[0];
+				if (currentFile.text != null) {
+					currentFile.text().then(parseCmdLineDescriptor);
+					return;
 				}
-				reader.readAsText(currentFile);
-				return;
+				else if (window.FileReader != null) {
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						parseCmdLineDescriptor(reader.result);
+					}
+					reader.readAsText(currentFile);
+					return;
+				}
 			}
 		}
+		if (window.ActiveXObject != null) {
+			var fileSystemObject = new ActiveXObject("Scripting.FileSystemObject");
+			var txtFile = fileSystemObject.OpenTextFile(this.value, 1, false, 0);
+			var jsonText = txtFile.ReadAll();
+			txtFile.Close();
+			parseCmdLineDescriptor(jsonText);
+			txtFile = undefined;
+			fileSystemObject = undefined;
+		}
 	}
-	if (window.ActiveXObject != null) {
-		var fileSystemObject = new ActiveXObject("Scripting.FileSystemObject");
-		var txtFile = fileSystemObject.OpenTextFile(this.value, 1, false, 0);
-		var jsonText = txtFile.ReadAll();
-		txtFile.Close();
-		parseCmdLineDescriptor(jsonText);
-		txtFile = undefined;
-		fileSystemObject = undefined;
+	catch(e) {
+		console.error(e);
 	}
 }
 
@@ -60,14 +65,17 @@ function parseCmdLineDescriptor(descriptorText) {
 		return;
 	}
 	argumentsDescriptors = JSON.parse(descriptorText);
+	if (argumentsDescriptors.sections == null) {
+		return;
+	}
 	var fileInputsReportFakePath = (document.getElementById(CMDLINE_DESCRIPTOR_INPUT_ID).value.substr(0, 12) == "C:\\fakepath\\");
-	for (var section in argumentsDescriptors.sections) {
+	for (var s = 0; s < argumentsDescriptors.sections.length; s++) {
 		var sectionFieldset = document.createElement("fieldset");
 		var sectionFieldsetLegend = document.createElement("legend");
-		sectionFieldsetLegend.innerText = argumentsDescriptors.sections[section].displayName;
+		sectionFieldsetLegend.innerText = argumentsDescriptors.sections[s].displayName;
 		sectionFieldset.appendChild(sectionFieldsetLegend);
-		for (var i = 0; i < argumentsDescriptors.sections[section].args.length; i++) {
-			var argumentDescriptor = argumentsDescriptors.sections[section].args[i];
+		for (var i = 0; i < argumentsDescriptors.sections[s].args.length; i++) {
+			var argumentDescriptor = argumentsDescriptors.sections[s].args[i];
 			var inputLabel = document.createElement("label");
 			var inputTagName = null;
 			var inputControl = null;

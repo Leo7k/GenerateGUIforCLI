@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "defaultArgumentNameValueSeparator": {
+      "type": "string"
+    },
+    "defaultSelectMultipleValueSeparator": {
+      "type": "string"
+    },
+    "defaultSelectMultipleQuotationSymbol": {
+      "type": "string"
+    },
+    "defaultQuotationSymbol": {
+      "type": "string",
+      "default": "\""
+    },
+    "defaultBooleanTrue": {
+      "type": "string",
+      "default": "true"
+    },
+    "defaultBooleanFalse": {
+      "type": "string",
+      "default": "false"
+    },
+    "sections": {
+      "type": "array",
+      "format": "table",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string"
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "booleanTrueAsPresence": {
+                  "type": "boolean"
+                },
+                "booleanTrue": {
+                  "type": "string"
+                },
+                "booleanFalse": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "boolean",
+                    "input-file",
+                    "input-file-multiple",
+                    "number",
+                    "output-file",
+                    "string",
+                    "select-one",
+                    "select-multiple"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "dontIncludeName": {
+                  "type": "boolean"
+                },
+                "quotationSymbol": {
+                  "type": "string"
+                },
+                "oneOf": {
+                  "defaultValue": {
+                  	"type": "string"
+                  },
+                  "defaultValue": {
+                  	"type": "boolean"
+                  },
+                  "defaultValue": {
+                  	"type": "number"
+                  }
+                },
+                "nameValueSeparator": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "type",
+                "displayName"
+              ]
+            }
+          }
+        },
+        "required": [
+          "displayName",
+          "args"
+        ]
+      }
+    }
+  },
+  "required": [
+    "defaultArgumentNameValueSeparator",
+    "defaultSelectMultipleValueSeparator",
+    "defaultSelectMultipleQuotationSymbol",
+    "defaultQuotationSymbol",
+    "defaultBooleanTrue",
+    "defaultBooleanFalse",
+    "sections"
+  ]
+}
