@@ -14,21 +14,30 @@
           "type": "boolean",
           "defaultValue": false,
           "displayName": "Unregister (call DllUnregisterServer).",
-          "booleanTrueAsPresence": true
+          "dontIncludeName": true,
+          "quotationSymbol": "",
+          "booleanTrue": "/u",
+          "booleanFalse": ""
         },
         {
           "name": "/s",
           "type": "boolean",
           "defaultValue": false,
           "displayName": "Silent mode - do not display messages.",
-          "booleanTrueAsPresence": true
+          "dontIncludeName": true,
+          "quotationSymbol": "",
+          "booleanTrue": "/s",
+          "booleanFalse": ""
         },
         {
           "name": "/n",
           "type": "boolean",
           "defaultValue": false,
           "displayName": "Prevent calling DllRegisterServer. This parameter requires you to also use DllInstall / DllUninstall Command line.",
-          "booleanTrueAsPresence": true
+          "dontIncludeName": true,
+          "quotationSymbol": "",
+          "booleanTrue": "/n",
+          "booleanFalse": ""
         },
         {
           "name": "/i",
@@ -48,7 +57,10 @@
           "type": "boolean",
           "defaultValue": false,
           "displayName": "Display help at the command prompt.",
-          "booleanTrueAsPresence": true
+          "dontIncludeName": true,
+          "quotationSymbol": "",
+          "booleanTrue": "/?",
+          "booleanFalse": ""
         }
       ]
     }
