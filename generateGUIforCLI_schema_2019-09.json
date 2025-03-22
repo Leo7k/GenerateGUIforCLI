@@ -41,9 +41,6 @@
             "items": {
               "type": "object",
               "properties": {
-                "booleanTrueAsPresence": {
-                  "type": "boolean"
-                },
                 "booleanTrue": {
                   "type": "string"
                 },
@@ -78,7 +75,7 @@
                 "quotationSymbol": {
                   "type": "string"
                 },
-                "oneOf": {
+                "oneOf": [
                   "defaultValue": {
                   	"type": "string"
                   },
@@ -92,7 +89,7 @@
                 "nameValueSeparator": {
                   "type": "string"
                 }
-              },
+              ],
               "required": [
                 "name",
                 "type",

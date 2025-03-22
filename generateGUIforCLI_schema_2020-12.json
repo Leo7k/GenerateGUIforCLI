@@ -38,9 +38,6 @@
                 {
                   "type": "object",
                   "properties": {
-                    "booleanTrueAsPresence": {
-                      "type": "boolean"
-                    },
                     "booleanTrue": {
                       "type": "string"
                     },
@@ -66,7 +63,7 @@
                     "quotationSymbol": {
                       "type": "string"
                     },
-                    "oneOf": {
+                    "oneOf": [
                       "defaultValue": {
                          "type": "string"
                       },
@@ -76,7 +73,7 @@
                       "defaultValue": {
                          "type": "number"
                       }
-                    },
+                    ],
                     "nameValueSeparator": {
                       "type": "string"
                     }

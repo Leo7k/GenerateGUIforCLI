@@ -157,17 +157,16 @@ function parseCmdLineDescriptor(descriptorText) {
 			if (argumentDescriptor.quotationSymbol !== undefined) {
 				inputControl.dataset.quotationSymbol = argumentDescriptor.quotationSymbol;
 			}
+			if (argumentDescriptor.dontIncludeName) {
+				inputControl.dataset.dontIncludeName = argumentDescriptor.dontIncludeName;
+			}
 			if (argumentDescriptor.type != "boolean") {
 				if (argumentDescriptor.required) {
 					inputControl.required = true;
 				}
-				if (argumentDescriptor.dontIncludeName) {
-					inputControl.dataset.dontIncludeName = argumentDescriptor.dontIncludeName;
-				}
 				if ((argumentDescriptor.defaultValue !== undefined) && (argumentDescriptor.type != "input-file") && (argumentDescriptor.type != "input-file-multiple")  && (argumentDescriptor.type != "select-multiple")) {
 					inputControl.value = argumentDescriptor.defaultValue;
 				}
-	
 				if (argumentDescriptor.type == "select-multiple") {
 					for (var j = 0; j < inputControl.options.length; j++) {
 						if (inputControl.options[j].value == argumentDescriptor.defaultValue) {
@@ -178,9 +177,6 @@ function parseCmdLineDescriptor(descriptorText) {
 	
 			}
 			else {
-				if (argumentDescriptor.booleanTrueAsPresence) {
-					inputControl.dataset.booleanTrueAsPresence = argumentDescriptor.booleanTrueAsPresence;
-				}
 				if (argumentDescriptor.booleanTrue !== undefined) {
 					inputControl.dataset.booleanTrue = argumentDescriptor.booleanTrue;
 				}
@@ -284,13 +280,8 @@ function onGenerateCLI_Clicked(evt) {
 					doNotIncludeThisParameter = (inputControl.files.length < 1);
 				}
 				else if (inputControl.type == "checkbox") {
-					if (inputControl.dataset.booleanTrueAsPresence) {
-						doNotIncludeThisParameter = !inputControl.checked;
-					}
-					else {
-						argumentValue = inputControl.checked ? booleanTrue : booleanFalse;
-						doNotIncludeThisParameter = false;
-					}
+					argumentValue = inputControl.checked ? booleanTrue : booleanFalse;
+					doNotIncludeThisParameter = false;
 				}
 				else {
 					if ((inputControl.value === undefined) || (inputControl.value === null) || (inputControl.value.length < 1)) {
@@ -313,14 +304,9 @@ function onGenerateCLI_Clicked(evt) {
 				if (!doNotIncludeThisParameter) {
 					var currentArgumentStr = "";
 					if (!inputControl.dataset.dontIncludeName) {
-						currentArgumentStr  = argumentName;
+						currentArgumentStr  = argumentName + nameValueSeparator;
 					}
-					if (!((inputControl.type == "checkbox") && (inputControl.dataset.booleanTrueAsPresence))) {
-						if (!inputControl.dataset.dontIncludeName) {
-							currentArgumentStr  = currentArgumentStr + nameValueSeparator;
-						}
-						currentArgumentStr = currentArgumentStr + quotationSymbol+argumentValue+quotationSymbol;
-					}
+					currentArgumentStr = currentArgumentStr + quotationSymbol+argumentValue+quotationSymbol;
 					//executeArguments.push(currentArgumentStr);
 					resultString = resultString + " " + currentArgumentStr;
 				}
