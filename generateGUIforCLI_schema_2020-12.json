@@ -63,17 +63,18 @@
                     "quotationSymbol": {
                       "type": "string"
                     },
-                    "oneOf": [
-                      "defaultValue": {
-                         "type": "string"
-                      },
-                      "defaultValue": {
-                         "type": "boolean"
-                      },
-                      "defaultValue": {
-                         "type": "number"
-                      }
-                    ],
+                    "defaultValue": {
+                       "oneOf": [{
+                          "type": "string"
+                        },
+                        {
+                           "type": "boolean"
+                        },
+                        {
+                           "type": "number"
+                        }
+                      ]
+                     },
                     "nameValueSeparator": {
                       "type": "string"
                     }
