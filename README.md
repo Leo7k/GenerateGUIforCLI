@@ -3,15 +3,13 @@ GenerateGUIforCLI - a simple tool that allows you to easiy build GUI on top of C
 
 # How to run?
 Download the entire repository zip archive and unpack it in any folder. There are three possible ways to run:
-
- 1. Open generateGUIforCLI.html in a browser. If this method is used, functionality will be limited - launching the application from the
-    graphical interface will be impossible, and you will need to manually copy command line arguments.
- 2. Open generateGUIforCLI.html using [NW.js](https://nwjs.io/)
- 3. Run generateGUIforCLI.hta (available only for Windows)
+ 1. Open generateGUIforCLI.html with [NW.js](https://nwjs.io/)
+ 2. Run generateGUIforCLI.hta (available only for Windows)
+ 3. Open generateGUIforCLI.html with browser. This option has limited functionality - you won't be able to launch target application from browser-based GUI.
 
 # How to use?
-You need to load a JSON file containing the description of command line arguments for a specific application. After doing this, corresponding input fields will appear where you can specify the necessary launch parameters for the console application. Once the parameters are filled in, press the "Generate Command Line" button - a list of command line arguments that correspond to the selected graphical interface parameters will be displayed in the text field.
-If you initiate GenerateGUIforCLI outside of a web browser, you have the option to run the intended application right from the GUI. To do this, click the "Execute" button.
+You need to load a JSON file containing the description of command line arguments for a specific application. After doing this, corresponding input fields will appear where you can specify the necessary launch parameters for the console application. Once the parameters are filled in, press the "Generate Command Line" button. A list of command line arguments that correspond to the selected graphical interface parameters will appear in the text field.
+If you run GenerateGUIforCLI with NW.js or generateGUIforCLI.hta, you have an option to run target application right from the GUI. To do this, click the "Execute" button.
 
 # Where to get a JSON file with command line argument descriptions?
 If you don't have a JSON file with command line argument descriptions for your specific application, you need to
