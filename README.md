@@ -1,5 +1,5 @@
 [![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/Leo7k/GenerateGUIforCLI/blob/main/README.RU.MD)
-
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/Leo7k/GenerateGUIforCLI/blob/main/README.MD)
 # What is this?
 GenerateGUIforCLI - a simple tool that allows you to easiy build GUI on top of CLI applications.
 
