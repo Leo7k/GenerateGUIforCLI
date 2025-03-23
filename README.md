@@ -1,3 +1,5 @@
+[![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/Leo7k/GenerateGUIforCLI/blob/main/README.RU.MD)
+
 # What is this?
 GenerateGUIforCLI - a simple tool that allows you to easiy build GUI on top of CLI applications.
 
@@ -9,7 +11,7 @@ Download the entire repository zip archive and unpack it in any folder. There ar
 
 # How to use?
 You need to load a JSON file containing the description of command line arguments for a specific application. After doing this, corresponding input fields will appear where you can specify the necessary launch parameters for the console application. Once the parameters are filled in, press the "Generate Command Line" button. A list of command line arguments that correspond to the selected graphical interface parameters will appear in the text field.
-If you run GenerateGUIforCLI with NW.js or generateGUIforCLI.hta, you have an option to run target application right from the GUI. To do this, click the "Execute" button.
+If you run GenerateGUIforCLI with NW.js or generateGUIforCLI.hta, you have an option to run target application right from the GUI. To do this, specify path to target application and click "Execute".
 
 # Where to get a JSON file with command line argument descriptions?
 If you don't have a JSON file with command line argument descriptions for your specific application, you need to
