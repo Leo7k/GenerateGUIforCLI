@@ -1,4 +1,20 @@
 {
+	"keywords": [ "gui", "user-interface", "gui-wrapper"],
+	"licenses": [
+	   {
+	       "type": "AGPLv3",
+	       "url": "https://github.com/Leo7k/GenerateGUIforCLI/blob/main/LICENSE"
+	   }
+	],
 	"name": "Generate GUI for CLI",
-	"main": "generateGUIforCLI.html"
+	"main": "generateGUIforCLI.html",
+	"repositories": [
+	       {
+	            "type": "git", 
+	            "url": "https://github.com/Leo7k/GenerateGUIforCLI"
+	       }
+	],
+	"window": {
+		"title": "Generate GUI for CLI"
+	}
 }
