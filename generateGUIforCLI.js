@@ -5,14 +5,28 @@ var CMDLINE_DESCRIPTOR_INPUT_ID = "cli-arguments-json";
 var CMDLINE_RESULT_ID = "result";
 var EXECUTABLE_FILE_INPUT_ID = "executable-name";
 var WARNING_MSG_ID = "warning-msg";
+var RUNNING_ON_IE_OR_HTA = (window.ActiveXObject != null);
+
+var win32ole = null;
+
+if (window.require && !RUNNING_ON_IE_OR_HTA) {
+	try {
+		win32ole = require('win32ole');
+		window.ActiveXObject = function(progId) {
+			return win32ole.client.Dispatch(progId);
+		};
+	}
+	catch (e) {
+	}
+}
 
 function onPageLoad(event) {
-	var cmdLineDescriptorFileInput = document.getElementById(CMDLINE_DESCRIPTOR_INPUT_ID);
+	window.cmdLineDescriptorFileInput = document.getElementById(CMDLINE_DESCRIPTOR_INPUT_ID);
 	if (cmdLineDescriptorFileInput.addEventListener) {
 		cmdLineDescriptorFileInput.addEventListener("change", loadCmdLineDescriptor, false);
 	}
 	else {
-		cmdLineDescriptorFileInput.attachEvent("onchange", loadCmdLineDescriptor);
+		cmdLineDescriptorFileInput.onchange = loadCmdLineDescriptor;
 	}
 	var genCmdLine_Button = document.getElementById(GENERATE_CMDLINE_BUTTON_ID);
 	if (genCmdLine_Button.addEventListener) {
@@ -39,7 +53,7 @@ function loadCmdLineDescriptor(evt) {
 					var reader = new FileReader();
 					reader.onload = function(e) {
 						parseCmdLineDescriptor(reader.result);
-					}
+					};
 					reader.readAsText(currentFile);
 					return;
 				}
@@ -47,25 +61,47 @@ function loadCmdLineDescriptor(evt) {
 		}
 		if (window.ActiveXObject != null) {
 			var fileSystemObject = new ActiveXObject("Scripting.FileSystemObject");
-			var txtFile = fileSystemObject.OpenTextFile(this.value, 1, false, 0);
-			var jsonText = txtFile.ReadAll();
-			txtFile.Close();
+			var txtFile = fileSystemObject.OpenTextFile(this.value || cmdLineDescriptorFileInput.value, 1, false, 0);
+			var jsonText = "{}";
+			try {
+				jsonText = txtFile.ReadAll();
+			}
+			catch(e) {
+				if (window.console) {
+					console.error(e.message);
+				}
+				alert(e.message);
+			}
+			finally {
+				txtFile.Close();
+			}
 			parseCmdLineDescriptor(jsonText);
 			txtFile = undefined;
 			fileSystemObject = undefined;
 		}
 	}
 	catch(e) {
-		console.error(e);
+		if (window.console) {
+			console.error(e.message);
+		}
+		alert(e.message);
 	}
 }
 
 function parseCmdLineDescriptor(descriptorText) {
 	if ((descriptorText == null) || (descriptorText.length < 1)) {
+		if (window.console) {
+			console.error("Format error: command line arguments description is empty.");
+		}
+		alert("Format error: command line arguments description is empty.");
 		return;
 	}
 	argumentsDescriptors = JSON.parse(descriptorText);
 	if (argumentsDescriptors.sections == null) {
+		if (window.console) {
+			console.error("Format error: no 'sections' found in provided command line arguments description.");
+		}
+		alert("Format error: no 'sections' found in provided command line arguments description.");
 		return;
 	}
 	var fileInputsReportFakePath = (document.getElementById(CMDLINE_DESCRIPTOR_INPUT_ID).value.substr(0, 12) == "C:\\fakepath\\");
@@ -322,7 +358,7 @@ function onGenerateCLI_Clicked(evt) {
 					executableFileInput.addEventListener("change", onExecutableSelected, false);
 				}
 				else {
-					executableFileInput.attachEvent("onchange", onExecutableSelected);
+					executableFileInput.onchange = onExecutableSelected;
 				}
 			}
 		}
@@ -365,13 +401,7 @@ function onExecuteClicked(evt) {
 	if (!confirm("WARNING: You are about to execute the command that you see bellow. Do not confirm execution if you don't understand what you're doing. Proceed at your own risk. \n \n "+commandToRun+" "+commandArguments)) {
 		return;
 	}
-	if (window.ActiveXObject != null) {
-		var shell = new ActiveXObject("Shell.Application");
-		shell.ShellExecute(commandToRun, commandArguments, "","open","1");
-		//Shell.ShellExecute(file, [ arguments ], [ directory ], [ operation ], [ show ]);
-		shell = undefined;
-	}
-	else if (window.require != null) {
+	if (window.require != null) {
 		var childProcessModule = require('child_process');
 		try {
 			//childProcessModule.execFile(commandToRun, [commandArguments], {}, shellOutput);
@@ -381,6 +411,13 @@ function onExecuteClicked(evt) {
 			alert(e);
 		}
 	}
+	else if (window.ActiveXObject != null) {
+		var shell = new ActiveXObject("Shell.Application");
+		shell.ShellExecute(commandToRun, commandArguments, "","open","1");
+		//Shell.ShellExecute(file, [ arguments ], [ directory ], [ operation ], [ show ]);
+		shell = undefined;
+	}
+
 }
 
 if (window.addEventListener) {
