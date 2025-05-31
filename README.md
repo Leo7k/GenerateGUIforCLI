@@ -1,6 +1,6 @@
 
-[![ru](https://img.shields.io/badge/lang-ru-green.svg)](/blob/main/README.ru.md)
-[![en](https://img.shields.io/badge/lang-en-green.svg)](/blob/main/README.md)
+[![ru](https://img.shields.io/badge/lang-ru-green.svg)](/README.ru.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](/README.md)
 
 # GenerateGUIforCLI
 
