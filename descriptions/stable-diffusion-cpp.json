@@ -1,0 +1,527 @@
+{
+  "description": "stable-diffusion-cpp example UI",
+  "defaultArgumentNameValueSeparator": "=",
+  "defaultSelectMultipleValueSeparator": " ",
+  "defaultSelectMultipleQuotationSymbol": "'",
+  "defaultQuotationSymbol": "\"",
+  "defaultBooleanTrue": "1",
+  "defaultBooleanFalse": "0",
+  "sections": [
+    {
+      "displayName": "Main parameters",
+      "args": [
+        {
+          "name": "-M",
+          "type": "select-one",
+          "displayName": "Mode of operation",
+          "defaultValue": "img_gen",
+          "dontIncludeName": false,
+          "nameValueSeparator": " ",
+	  "options": [
+            {
+              "value": "img_gen",
+              "displayValue": "Generate image"
+            },
+            {
+              "value": "vid_gen",
+              "displayValue": "Generate video"
+            },
+            {
+              "value": "upscale",
+              "displayValue": "Upscale"
+            },
+            {
+              "value": "convert",
+              "displayValue": "Convert"
+            },
+            {
+              "value": "metadata",
+              "displayValue": "Metadata"
+            }
+          ]
+        },
+        {
+          "name": "-o",
+          "type": "output-file",
+          "displayName": "Output file path",
+          "defaultValue": "./output.png",
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "-b",
+          "type": "number",
+          "displayName": "Number of outputs",
+          "defaultValue": 1,
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "-v",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "Verbose",
+          "defaultValue": false,
+          "booleanTrue": "-v",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        }
+      ]
+    },
+    {
+      "displayName": "Model parameters",
+      "args": [
+        {
+          "name": "-m",
+          "type": "input-file",
+          "displayName": "Full model (diffusion, VAE and encoder in single file)",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--diffusion-model",
+          "type": "input-file",
+          "displayName": "Diffusion model",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--vae",
+          "type": "input-file",
+          "displayName": "VAE model",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--llm",
+          "type": "input-file",
+          "displayName": "LLM encoder (for modern models like Flux.2/Z-Image)",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--t5xxl",
+          "type": "input-file",
+          "displayName": "T5XXL encoder (for older models)",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--clip_l",
+          "type": "input-file",
+          "displayName": "Clip-L (for older models)",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--lora-model-dir",
+          "type": "input-file",
+          "displayName": "Directory with LoRa models",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--type",
+          "type": "select-one",
+          "displayName": "Weights type",
+          "defaultValue": "",
+          "dontIncludeName": false,
+          "nameValueSeparator": " ",
+	  "options": [
+            {
+              "value": "f32",
+              "displayValue": "f32"
+            },
+            {
+              "value": "f16",
+              "displayValue": "f16"
+            },
+            {
+              "value": "q4_0",
+              "displayValue": "q4_0"
+            },
+            {
+              "value": "q4_1",
+              "displayValue": "q4_1"
+            },
+            {
+              "value": "q5_0",
+              "displayValue": "q5_0"
+            },
+            {
+              "value": "q5_1",
+              "displayValue": "q5_1"
+            },
+            {
+              "value": "q8_0",
+              "displayValue": "q8_0"
+            },
+            {
+              "value": "q2_K",
+              "displayValue": "q2_K"
+            },
+            {
+              "value": "q3_K",
+              "displayValue": "q3_K"
+            },
+            {
+              "value": "q4_K",
+              "displayValue": "q4_K"
+            }
+          ]
+        },
+        {
+          "name": "-t",
+          "type": "number",
+          "displayName": "Number of CPU threads",
+          "defaultValue": -1,
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "--fa",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "Use Flash Attention",
+          "defaultValue": true,
+          "booleanTrue": "--fa",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        },
+        {
+          "name": "--mmap",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "Use MMAP",
+          "defaultValue": true,
+          "booleanTrue": "--mmap",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        }
+      ]
+    },
+    {
+      "displayName": "Generation parameters",
+      "args": [
+        {
+          "name": "-p",
+          "type": "string",
+          "displayName": "Prompt",
+          "required": true,
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "-n",
+          "type": "string",
+          "displayName": "Negative prompt",
+          "defaultValue": "",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "-s",
+          "type": "number",
+          "displayName": "Seed",
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "-W",
+          "type": "number",
+          "displayName": "Width",
+          "defaultValue": 512,
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "-H",
+          "type": "number",
+          "displayName": "Height",
+          "defaultValue": 512,
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "--steps",
+          "type": "number",
+          "displayName": "Number of steps",
+          "defaultValue": 20,
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "--cfg-scale",
+          "type": "number",
+          "displayName": "CFG Scale",
+          "defaultValue": 7.0,
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "--sampling-method",
+          "type": "select-one",
+          "displayName": "Sampling method",
+          "defaultValue": "euler",
+          "dontIncludeName": false,
+          "nameValueSeparator": " ",
+	  "options": [
+            {
+              "value": "euler",
+              "displayValue": "euler"
+            },
+            {
+              "value": "euler_a",
+              "displayValue": "euler_a"
+            },
+            {
+              "value": "heun",
+              "displayValue": "heun"
+            },
+            {
+              "value": "dpm2",
+              "displayValue": "dpm2"
+            },
+            {
+              "value": "dpm++2s_a",
+              "displayValue": "dpm++2s_a"
+            },
+            {
+              "value": "dpm++2m",
+              "displayValue": "dpm++2m"
+            },
+            {
+              "value": "dpm++2mv2",
+              "displayValue": "dpm++2mv2"
+            },
+            {
+              "value": "ipndm",
+              "displayValue": "ipndm"
+            },
+            {
+              "value": "ipndm_v",
+              "displayValue": "ipndm_v"
+            },
+            {
+              "value": "lcm",
+              "displayValue": "lcm"
+            },
+            {
+              "value": "ddim_trailing",
+              "displayValue": "ddim_trailing"
+            },
+            {
+              "value": "tcd",
+              "displayValue": "tcd"
+            },
+            {
+              "value": "res_multistep",
+              "displayValue": "res_multistep"
+            },
+            {
+              "value": "res_2s",
+              "displayValue": "res_2s"
+            },
+            {
+              "value": "er_sde",
+              "displayValue": "er_sde"
+            }
+          ]
+        },
+        {
+          "name": "--scheduler",
+          "type": "select-one",
+          "displayName": "Scheduler",
+          "defaultValue": "",
+          "dontIncludeName": false,
+          "nameValueSeparator": " ",
+	  "options": [
+            {
+              "value": "discrete",
+              "displayValue": "Discrete"
+            },
+            {
+              "value": "karras",
+              "displayValue": "Karras"
+            },
+            {
+              "value": "exponential",
+              "displayValue": "Exponential"
+            },
+            {
+              "value": "ays",
+              "displayValue": "ays"
+            },
+            {
+              "value": "gits",
+              "displayValue": "gits"
+            },
+            {
+              "value": "smoothstep",
+              "displayValue": "smoothstep"
+            },
+            {
+              "value": "sgm_uniform",
+              "displayValue": "sgm_uniform"
+            },
+            {
+              "value": "simple",
+              "displayValue": "simple"
+            },
+            {
+              "value": "kl_optimal",
+              "displayValue": "kl_optimal"
+            },
+            {
+              "value": "lcm",
+              "displayValue": "lcm"
+            }
+          ]
+        },
+        {
+          "name": "--rng",
+          "type": "select-one",
+          "displayName": "RNG type",
+          "defaultValue": "std_default",
+          "dontIncludeName": false,
+          "nameValueSeparator": " ",
+	  "options": [
+            {
+              "value": "std_default",
+              "displayValue": "Default"
+            },
+            {
+              "value": "cuda",
+              "displayValue": "CUDA"
+            },
+            {
+              "value": "cpu",
+              "displayValue": "CPU"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "displayName": "VRAM parameters",
+      "args": [
+        {
+          "name": "--vae-tiling",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "VAE tiling",
+          "defaultValue": false,
+          "booleanTrue": "--vae-tiling",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        },
+        {
+          "name": "--vae-on-cpu",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "VAE on CPU",
+          "defaultValue": false,
+          "booleanTrue": "--vae-on-cpu",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        },
+        {
+          "name": "--clip-on-cpu",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "CLIP on CPU",
+          "defaultValue": false,
+          "booleanTrue": "--clip-on-cpu",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        },
+        {
+          "name": "--offload-to-cpu",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "Offload to CPU",
+          "defaultValue": true,
+          "booleanTrue": "--offload-to-cpu",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        },
+        {
+          "name": "--control-net-cpu",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "ControlNet uses CPU",
+          "defaultValue": false,
+          "booleanTrue": "--control-net-cpu",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        }
+      ]
+    },
+    {
+      "displayName": "Advanced paramteres (ControlNet, img2img)",
+      "args": [
+        {
+          "name": "--control-net",
+          "type": "input-file",
+          "displayName": "ControlNet model",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--control-image",
+          "type": "input-file",
+          "displayName": "ControlNet image",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--control-strength",
+          "type": "number",
+          "displayName": "ControlNet strength",
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "-i",
+          "type": "input-file",
+          "displayName": "Initial image (img2img)",
+          "nameValueSeparator": " ",
+          "quotationSymbol": "\""
+        },
+        {
+          "name": "--strength",
+          "type": "number",
+          "displayName": "Strength (img2img)",
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "--canny",
+          "type": "boolean",
+          "quotationSymbol": "",
+          "displayName": "Use Canny",
+          "defaultValue": false,
+          "booleanTrue": "--canny",
+          "booleanFalse": "",
+          "dontIncludeName": true,
+          "nameValueSeparator": ""
+        }
+      ]
+    },
+    {
+      "displayName": "Video Generation parameters",
+      "args": [
+        {
+          "name": "--video-frames",
+          "type": "number",
+          "displayName": "Number of frames",
+          "nameValueSeparator": " "
+        },
+        {
+          "name": "--fps",
+          "type": "number",
+          "displayName": "FPS",
+          "nameValueSeparator": " "
+        }
+      ]
+    }
+  ]
+}
