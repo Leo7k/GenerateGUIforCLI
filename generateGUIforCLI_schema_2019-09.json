@@ -28,7 +28,6 @@
     },
     "sections": {
       "type": "array",
-      "format": "table",
       "uniqueItems": true,
       "items": {
         "type": "object",
@@ -38,6 +37,7 @@
           },
           "args": {
             "type": "array",
+            "uniqueItems": true,
             "items": {
               "type": "object",
               "properties": {
@@ -52,16 +52,7 @@
                 },
                 "type": {
                   "type": "string",
-                  "enum": [
-                    "boolean",
-                    "input-file",
-                    "input-file-multiple",
-                    "number",
-                    "output-file",
-                    "string",
-                    "select-one",
-                    "select-multiple"
-                  ]
+                  "enum": ["boolean", "input-file", "input-file-multiple", "number", "output-file", "string", "select-one", "select-multiple"]
                 },
                 "required": {
                   "type": "boolean"
@@ -84,10 +75,29 @@
                         },
                         {
                              "type": "number"
-                        }]
+                        }
+                      ]
                  },
                 "nameValueSeparator": {
                   "type": "string"
+                },
+                "options": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                     "type": "object",
+                     "properties": {
+                       "value": {
+                         "type": "string"
+                        },
+                        "displayValue": {
+                           "type": "string"
+                        }
+                     },
+                     "required": [
+                        "value"
+                     ]
+                  }
                 }
               },
               "required": [

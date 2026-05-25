@@ -15,18 +15,21 @@
       "type": "string"
     },
     "defaultQuotationSymbol": {
-      "type": "string"
+      "type": "string",
+      "default": "\""
     },
     "defaultBooleanTrue": {
-      "type": "string"
+      "type": "string",
+      "default": "true"
     },
     "defaultBooleanFalse": {
-      "type": "string"
+      "type": "string",
+      "default": "false"
     },
     "sections": {
       "type": "array",
-      "prefixItems": [
-          {
+      "uniqueItems": true,
+      "items": {
           "type": "object",
           "properties": {
             "displayName": {
@@ -34,8 +37,8 @@
             },
             "args": {
               "type": "array",
-              "prefixItems": [
-                {
+              "uniqueItems": true,
+              "items": {
                   "type": "object",
                   "properties": {
                     "booleanTrue": {
@@ -77,6 +80,24 @@
                      },
                     "nameValueSeparator": {
                       "type": "string"
+                    },
+                    "options": {
+                       "type": "array",
+                       "uniqueItems": true,
+                       "items": {
+                          "type": "object",
+                          "properties": {
+                             "value": {
+                               "type": "string"
+                             },
+                             "displayValue": {
+                               "type": "string"
+                             }
+                          },
+                          "required": [
+                            "value"
+                          ]
+                       }
                     }
                   },
                   "required": [
@@ -85,7 +106,6 @@
                     "displayName"
                   ]
                 }
-              ]
             }
           },
           "required": [
@@ -93,7 +113,6 @@
             "args"
           ]
         }
-      ]
     }
   },
   "required": [
