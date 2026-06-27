@@ -36,12 +36,12 @@ Create a JSON file describing your CLI app’s arguments. Follow the [JSON Schem
 
 ### Step 2: Load the JSON File
 1. Open the tool (NW.js/HTA/browser).
-2. Click **"Path to CLI arguments description"** and select your JSON file.
+2. Click **"Choose a file with a declarative description of CLI arguments"** and select your JSON file.
 3. The GUI will auto-generate input fields based on the JSON.
 
 ### Step 3: Generate and Execute
 1. Fill in the GUI fields.
-2. Click **"Generate Command Line"** to preview the CLI command.
+2. Click **"Generate CLI arguments"** to preview the CLI command.
 3. *(NW.js/HTA only)*:  
    - Specify the executable path.  
    - Click **"Execute"** to run the CLI app with your parameters.
