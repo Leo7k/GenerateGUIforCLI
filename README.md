@@ -37,7 +37,7 @@ Create a JSON file describing your CLI app’s arguments. Follow the [JSON Schem
 ### Step 2: Load the JSON File
 1. Open the tool (NW.js/HTA/browser).
 2. Click **"Choose a file with a declarative description of CLI arguments"** and select your JSON file.
-3. The GUI will auto-generate input fields based on the JSON.
+3. The app will auto-generate input fields based on the selected file.
 
 ### Step 3: Generate and Execute
 1. Fill in the GUI fields.
