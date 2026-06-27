@@ -1,22 +1,55 @@
 body {
 	border: none;
 }
-label {
-	margin-right: 4em;
-	margin-bottom: 2em;
-	display: inline-block;
+
+legend {
+	font-weight: bold;
 }
-input, select {
-	margin-left: 1em;
+
+fieldset {
+	margin-bottom: 0.5em;
+}
+
+label {
+	display: inline-block;
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
+}
+
+form label {
+	margin-left: 3px;
+	margin-right: 1em;
+}
+
+input {
 	vertical-align: text-top;
 }
+
+select, input[type="text"], input[type="number"], input[type="file"] {
+	margin-left: 7px;
+}
+
 input[type="checkbox"] {
 	margin-left: 0px;
-	vertical-align: text-top;
 }
+
+div label {
+	min-width: 100%;
+	max-width: 100%;
+}
+
 textarea {
 	min-width: 100%;
+	max-width: 100%;
+	margin-left: 0px;
+	margin-right: 0px;
 }
+
 form {
-	display: block;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+}
+
+.centered {
+	text-align: center;
 }

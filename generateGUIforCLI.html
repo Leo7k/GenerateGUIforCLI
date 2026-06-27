@@ -10,19 +10,16 @@
 <link rel="stylesheet" href="generateGUIforCLI.css"/>
  </head>
 <body scroll="auto">
-<label>Path to CLI arguments declarative description: <input type="file" id="cli-arguments-json" accept="application/json, text/json"/></label><br/>
+<div class="centered"><label>Choose a file with a declarative description of CLI arguments: <input type="file" id="cli-arguments-json" accept="application/json, text/json"/></label></div>
 <form id="main-form"></form>
-<br/>
-<button id="generate-command-line" type="button" disabled>Generate command line</button>
-<br/>
-<br/>
-<textarea id="result"></textarea>
-<br/>
+<div class="centered"><button id="generate-command-line" type="button" disabled>Generate CLI arguments</button>
+<label><textarea id="result"></textarea></label>
+</div>
 <div id="warning-msg"></div>
-<br/>
-<label>Path to executable: <input type="file" id="executable-name" accept="application/*" disabled/></label><br/>
-<br/>
-<button id="execute" type="button" disabled>Execute</button>
+<div class="centered">
+<label>Path to executable: <input type="file" id="executable-name" accept="application/*" disabled/></label>
+<label><button id="execute" type="button" disabled>Execute</button></label>
+</div>
 <script type="text/javascript" src="lib/json3/json3.js"></script>
 <script type="text/javascript" src="generateGUIforCLI.js" async></script>
 </body>
